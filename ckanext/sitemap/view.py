@@ -37,13 +37,25 @@ def sitemap_controller():
         context = {'model': model, 'session': model.Session, 'user': c.user or c.author}
         data_dict = {
             'q': '*:*',
+            'fq': 'dataset_type:dataset OR dataset_type:showcase',
             'start': 0,
+            'include_private': False,
             'rows': 500  # Adjust as needed
         }
 
         # Use the package_search action to query datasets
         search_action = tk.get_action('package_search')
-        search_results = search_action(context, data_dict)
+        search_results = []
+        start = 0
+        rows = 500
+        while True:
+            data_dict['start'] = start
+            data_dict['rows'] = rows
+            result = search_action(context, data_dict)
+            search_results.extend(result['results'])
+            if len(result['results']) < rows:
+                break
+            start += rows
         datasets = search_results['results']
 
         all_ckan_urls = [
@@ -78,7 +90,10 @@ def sitemap_controller():
                     resource_id=res["id"]
                 )
                 lastmod = etree.SubElement(url, "lastmod")
-                resmodifiedDate = datetime.strptime(res["created"], "%Y-%m-%dT%H:%M:%S.%f")
+                if res["last_modified"]:
+                    resmodifiedDate = datetime.strptime(res["last_modified"], "%Y-%m-%dT%H:%M:%S.%f")
+                else:
+                    resmodifiedDate = datetime.strptime(res["created"], "%Y-%m-%dT%H:%M:%S.%f")
                 lastmod.text = resmodifiedDate.strftime("%Y-%m-%d")
 
         with open(os.path.join(current_dir, filename), "wb") as f:
