@@ -56,7 +56,6 @@ def sitemap_controller():
             if len(result['results']) < rows:
                 break
             start += rows
-        datasets = search_results['results']
 
         all_ckan_urls = [
             tk.url_for(controller="home", action="index", _external=True),
@@ -70,7 +69,7 @@ def sitemap_controller():
             loc = etree.SubElement(url, "loc")
             loc.text = _url
 
-        for pkg in datasets:
+        for pkg in search_results:
             url = etree.SubElement(root, "url")
             loc = etree.SubElement(url, "loc")
             pkg_url = tk.url_for(controller="dataset", action="read", id=pkg["name"])
