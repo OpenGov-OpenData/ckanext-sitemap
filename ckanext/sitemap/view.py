@@ -75,8 +75,7 @@ def sitemap_controller():
             pkg_url = tk.url_for(controller="dataset", action="read", id=pkg["name"])
             loc.text = tk.config.get("ckan.site_url") + pkg_url
             lastmod = etree.SubElement(url, "lastmod")
-            metadata_modifiedDate = datetime.strptime(pkg["metadata_modified"], "%Y-%m-%dT%H:%M:%S.%f")
-            lastmod.text = metadata_modifiedDate.strftime("%Y-%m-%d")
+            lastmod.text = pkg["metadata_modified"]
             resources = list(pkg["resources"])
 
             for res in resources:
@@ -90,10 +89,9 @@ def sitemap_controller():
                 )
                 lastmod = etree.SubElement(url, "lastmod")
                 if res["last_modified"]:
-                    resmodifiedDate = datetime.strptime(res["last_modified"], "%Y-%m-%dT%H:%M:%S.%f")
+                    lastmod.text = res["last_modified"]
                 else:
-                    resmodifiedDate = datetime.strptime(res["created"], "%Y-%m-%dT%H:%M:%S.%f")
-                lastmod.text = resmodifiedDate.strftime("%Y-%m-%d")
+                    lastmod.text = res["created"]
 
         with open(os.path.join(current_dir, filename), "wb") as f:
             f.write(etree.tostring(root, pretty_print=True))
