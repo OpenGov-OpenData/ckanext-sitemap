@@ -37,10 +37,10 @@ def sitemap_controller():
         context = {'model': model, 'session': model.Session, 'user': c.user or c.author}
         data_dict = {
             'q': '*:*',
-            'fq': 'dataset_type:dataset OR dataset_type:showcase',
+            'fq': 'dataset_type:dataset',
             'start': 0,
             'include_private': False,
-            'rows': 500  # Adjust as needed
+            'rows': 500
         }
 
         # Use the package_search action to query datasets
@@ -88,7 +88,7 @@ def sitemap_controller():
                     resource_id=res["id"]
                 )
                 lastmod = etree.SubElement(url, "lastmod")
-                if res["last_modified"]:
+                if res.get("last_modified"):
                     lastmod.text = res["last_modified"]
                 else:
                     lastmod.text = res["created"]
