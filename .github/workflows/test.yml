@@ -2,7 +2,7 @@ name: Tests
 on: [push, pull_request]
 jobs:
   test:
-    runs-on: gha-runner-scale-set-platform
+    runs-on: ubuntu-latest
     container:
       # The CKAN version tag of the Solr and Postgres containers should match
       # the one of the container the tests run on.
@@ -59,6 +59,11 @@ jobs:
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_API_TOKEN }}
         SONAR_HOST_URL: ${{ secrets.SONAR_EXTERNAL_URL }}
-    - name: SonarQube - Add project to application
-      run: |
-        curl -X POST -u ${{ secrets.SONAR_API_TOKEN }}: 'https://sonarqube.production.engops.opengov.zone/api/applications/add_project' --data-raw "application=open-data&project=ckanext-sitemap"
+  
+  upload-sbom:
+    name: SonarQube - Add project to application
+    runs-on: self-hosted
+    steps:
+      - name: SonarQube - Add project to application
+        run: |
+          curl -X POST -u ${{ secrets.SONAR_API_TOKEN }}: 'https://sonarqube.production.engops.opengov.zone/api/applications/add_project' --data-raw "application=open-data&project=ckanext-sitemap"
