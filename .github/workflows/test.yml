@@ -49,7 +49,6 @@ jobs:
       uses: sonarsource/sonarqube-scan-action@master
       with: 
         args: >
-          -Dsonar.application=open-data
           -Dsonar.projectKey=ckanext-sitemap
           -Dsonar.tests=ckanext/downloadall/tests/
           -Dsonar.python.coverage.reportPaths=coverage.xml
