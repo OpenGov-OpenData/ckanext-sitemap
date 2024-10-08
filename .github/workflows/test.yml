@@ -50,7 +50,7 @@ jobs:
       with: 
         args: >
           -Dsonar.projectKey=ckanext-sitemap
-          -Dsonar.tests=ckanext/downloadall/tests/
+          -Dsonar.tests=ckanext/sitemap/tests/
           -Dsonar.python.coverage.reportPaths=coverage.xml
           -Dsonar.verbose=true
       env:
