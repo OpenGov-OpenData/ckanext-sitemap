@@ -15,7 +15,7 @@ SITEMAP_NS = "http://www.sitemaps.org/schemas/sitemap/0.9"
 
 XHTML_NS = "http://www.w3.org/1999/xhtml"
 
-log = logging.getLogger(__file__)
+log = logging.getLogger(__name__)
 
 
 def sitemap_controller():
@@ -107,17 +107,21 @@ def sitemap_controller():
     ]
 
     if not sitemap_file:
+        log.info("no sitemap.xml file found, creating new one")
         _create_file(_generate_filename(), root)
     else:
         file_date = sitemap_file[0].replace("sitemap-", "").replace(".xml", "")
+        log.info("sitemap.xml found %s, checking if it's outdated", file_date)
         now = datetime.now(timezone.utc)
         file_date = datetime.strptime(file_date, format_string).astimezone(timezone.utc)
         time_difference = now - file_date
 
         if time_difference.total_seconds() > 8 * 3600:
+            log.info("sitemap.xml found %s, but it is outdated", file_date)
             _remove_file(sitemap_file[0])
             _create_file(_generate_filename(), root)
         else:
+            log.info("sitemap.xml found %s, no update needed", file_date)
             response = create_response(sitemap_file[0])
             return response
 
