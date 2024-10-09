@@ -52,7 +52,7 @@ jobs:
           -Dsonar.projectKey=ckanext-sitemap
           -Dsonar.sources=ckanext/sitemap
           -Dsonar.tests=ckanext/sitemap/tests
-          -Dsonar.exclusions=ckanext/tests/**
+          -Dsonar.exclusions=ckanext/sitemap/tests/**
           -Dsonar.python.coverage.reportPaths=coverage.xml
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_API_TOKEN }}
