@@ -31,8 +31,8 @@ log = logging.getLogger(__name__)
 
 
 def _get_locales_from_config() -> Set:
-    locales_offered = tk.config.get('ckan.locales_offered')
-    filtered_out = tk.config.get('ckan.locales_filtered_out')
+    locales_offered = tk.aslist(tk.config.get('ckan.locales_offered'))
+    filtered_out = tk.aslist(tk.config.get('ckan.locales_filtered_out'))
     locale_default = [tk.config.get('ckan.locale_default', 'en')]
 
     all_locales = set(locales_offered)
